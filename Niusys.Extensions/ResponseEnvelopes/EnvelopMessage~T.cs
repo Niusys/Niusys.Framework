@@ -2,15 +2,15 @@
 
 namespace Niusys.Extensions.ResponseEnvelopes
 {
-    public class EnvelopMessage<T> : EnvelopMessage
+    public class EnvelopMessage<T> : EnvelopMessageAbstract
     {
         public EnvelopMessage()
         {
 
         }
 
-        public EnvelopMessage(int code, string errorMessage, string friendlyMessage, T data)
-            : base(code, errorMessage, friendlyMessage)
+        public EnvelopMessage(int code, string msg, string errMsg, T data)
+            : base(code, msg, errMsg)
         {
             Data = data;
         }
@@ -20,7 +20,6 @@ namespace Niusys.Extensions.ResponseEnvelopes
             Data = data;
         }
 
-        [JsonProperty(PropertyName = "data")]
-        public new T Data { get; set; }
+        public T Data { get; set; }
     }
 }

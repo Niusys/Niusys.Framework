@@ -16,4 +16,4 @@
     - name: build app
       commands:
       - export pushCommand="dotnet nuget push  --source http://nuget.niusys.com/v3/index.json --api-key 334EB13C-21F3-4EF0-AAB3-813836EA8194 /src/packages/"
-      - docker run -t --rm -v /data/build_share/dotnet:/root/.dotnet -v /data/build_share/nuget:/root/.nuget -v `pwd`:/src --workdir /src mcr.microsoft.com/dotnet/core/sdk:3.1 bash -c "$codeBuildCommand"
+      - docker run -t --rm -v /data/build_share/dotnet:/root/.dotnet -v /data/build_share/nuget:/root/.nuget -v `pwd`:/src --workdir /src mcr.microsoft.com/dotnet/core/sdk:3.1 bash -c "$pushCommand"

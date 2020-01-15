@@ -10,7 +10,7 @@
     steps:
     - name: build
       commands:
-      - export codeBuildCommand="find ./src/  -maxdepth 1 -mindepth 1 -type d -execdir bash -c 'cd \$0 && dotnet pack --configuration Release --output /src/packages/ /p:PackageVersion=3.1.$DRONE_BUILD_NUMBER' {} \;"
+      - export codeBuildCommand="find /src/  -maxdepth 1 -mindepth 1 -type d -execdir bash -c 'cd \$0 && dotnet pack --configuration Release --output /src/packages/ /p:PackageVersion=3.1.$DRONE_BUILD_NUMBER' {} \;"
       - docker run -t --rm -v /data/build_share/dotnet:/root/.dotnet -v /data/build_share/nuget:/root/.nuget -v `pwd`:/src --workdir /src mcr.microsoft.com/dotnet/core/sdk:3.1 bash -c "$codeBuildCommand"
     
     - name: build app

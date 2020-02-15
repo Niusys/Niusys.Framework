@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <ApplicationIcon />
+    <OutputType>Library</OutputType>
+    <StartupObject />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MailKit" Version="2.5.0" />
+    <PackageReference Include="MongoDB.Bson" Version="2.10.2" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Niusys.Extensions.Storage.Mongo\Niusys.Extensions.Storage.Mongo.csproj" />
+    <ProjectReference Include="..\Niusys.Extensions\Niusys.Extensions.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -8,8 +8,8 @@ namespace Niusys.Extensions.ResponseEnvelopes
         {
         }
 
-        public EnvelopMessage(int code, string msg = null, string errMsg = null) 
-            : base(code, msg, errMsg)
+        public EnvelopMessage(int code, string hintMessage = null, string debugMessage = null) 
+            : base(code, hintMessage, debugMessage)
         {
         }
 

@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29201.188
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Niusys.Extensions.MessageQueue.RabbitMq", "Niusys.Extensions.MessageQueue.RabbitMq\Niusys.Extensions.MessageQueue.RabbitMq.csproj", "{84F49B32-9A8D-426F-B834-1566957BEDDC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Niusys.Extensions.MessageQueue.RabbitMq", "Niusys.Extensions.MessageQueue.RabbitMq\Niusys.Extensions.MessageQueue.RabbitMq.csproj", "{84F49B32-9A8D-426F-B834-1566957BEDDC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Niusys.Extensions.Storage.Mongo", "Niusys.Extensions.Storage.Mongo\Niusys.Extensions.Storage.Mongo.csproj", "{0123C7E9-065F-4342-82DD-C379AE3BBA93}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Niusys.Extensions.Storage.Mongo", "Niusys.Extensions.Storage.Mongo\Niusys.Extensions.Storage.Mongo.csproj", "{0123C7E9-065F-4342-82DD-C379AE3BBA93}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Niusys.Extensions", "Niusys.Extensions\Niusys.Extensions.csproj", "{9EA4962F-B1CA-47DE-9309-4AAC1481CD39}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Niusys.Extensions", "Niusys.Extensions\Niusys.Extensions.csproj", "{9EA4962F-B1CA-47DE-9309-4AAC1481CD39}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Niusys.Extensions.AspNetCore", "Niusys.Extensions.AspNetCore\Niusys.Extensions.AspNetCore.csproj", "{BB893E6B-87C9-4F3B-8F91-33F08CA3EBC1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +57,18 @@ Global
 		{9EA4962F-B1CA-47DE-9309-4AAC1481CD39}.Release|x64.Build.0 = Release|Any CPU
 		{9EA4962F-B1CA-47DE-9309-4AAC1481CD39}.Release|x86.ActiveCfg = Release|Any CPU
 		{9EA4962F-B1CA-47DE-9309-4AAC1481CD39}.Release|x86.Build.0 = Release|Any CPU
+		{BB893E6B-87C9-4F3B-8F91-33F08CA3EBC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB893E6B-87C9-4F3B-8F91-33F08CA3EBC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB893E6B-87C9-4F3B-8F91-33F08CA3EBC1}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BB893E6B-87C9-4F3B-8F91-33F08CA3EBC1}.Debug|x64.Build.0 = Debug|Any CPU
+		{BB893E6B-87C9-4F3B-8F91-33F08CA3EBC1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BB893E6B-87C9-4F3B-8F91-33F08CA3EBC1}.Debug|x86.Build.0 = Debug|Any CPU
+		{BB893E6B-87C9-4F3B-8F91-33F08CA3EBC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB893E6B-87C9-4F3B-8F91-33F08CA3EBC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB893E6B-87C9-4F3B-8F91-33F08CA3EBC1}.Release|x64.ActiveCfg = Release|Any CPU
+		{BB893E6B-87C9-4F3B-8F91-33F08CA3EBC1}.Release|x64.Build.0 = Release|Any CPU
+		{BB893E6B-87C9-4F3B-8F91-33F08CA3EBC1}.Release|x86.ActiveCfg = Release|Any CPU
+		{BB893E6B-87C9-4F3B-8F91-33F08CA3EBC1}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

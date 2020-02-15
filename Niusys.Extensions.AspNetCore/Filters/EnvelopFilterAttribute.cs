@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
+using Niusys.Extensions.AspNetCore.Extensions;
 using Niusys.Extensions.AspNetCore.Sessions;
 using Niusys.Extensions.ResponseEnvelopes;
 using System.Text.Json;
@@ -19,8 +20,7 @@ namespace Niusys.Extensions.AspNetCore.Filters
                 return;
             }
 
-            var requestSession = actionExecutedContext.HttpContext.RequestServices.GetService<IRequestSession>();
-            if (!requestSession.IsApiRequest)
+            if (!actionExecutedContext.HttpContext.Request.IsApiRequest())
                 return;
 
             if (actionExecutedContext.Result is JsonResult jsonResultContent)

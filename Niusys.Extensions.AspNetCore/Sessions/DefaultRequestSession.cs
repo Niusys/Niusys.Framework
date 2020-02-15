@@ -2,9 +2,7 @@
 using Microsoft.Extensions.Hosting;
 using Niusys.Extensions.AspNetCore.Extensions;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Niusys.Extensions.AspNetCore.Sessions
 {

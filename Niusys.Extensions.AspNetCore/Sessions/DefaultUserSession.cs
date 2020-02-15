@@ -1,19 +1,16 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
+using Niusys.Extensions.Storage.Mongo;
 using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using Niusys.Extensions.Storage.Mongo;
 
 namespace Niusys.Extensions.AspNetCore.Sessions
 {
-    public class DefaultUserSession<TUser, TUserType, TRole>
-        where TUser : class, IUser
+    public class DefaultUserSession<TUser, TUserType> : IUserSession<TUser, TUserType> where TUser : class, IUser
         where TUserType : struct
-        where TRole : struct
     {
         private readonly IdentityOptions _options;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -75,28 +72,6 @@ namespace Niusys.Extensions.AspNetCore.Sessions
                     return userType;
                 }
                 throw new InvalidCastException($"UserType获取失败");
-            }
-        }
-
-        private List<TRole> _userRoles;
-        public IReadOnlyList<TRole> UserRoles
-        {
-            get
-            {
-                if (_userRoles == null)
-                {
-                    _userRoles = new List<TRole>();
-                    var roles = _userIdentity.Claims.Where(x => x.Type == "UserRole").Select(x => x.Value);
-
-                    foreach (var item in roles)
-                    {
-                        if (Enum.TryParse<TRole>(item, out var role))
-                        {
-                            _userRoles.Add(role);
-                        }
-                    }
-                }
-                return _userRoles.AsReadOnly();
             }
         }
 

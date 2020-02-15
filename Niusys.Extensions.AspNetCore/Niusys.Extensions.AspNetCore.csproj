@@ -17,8 +17,4 @@
     <ProjectReference Include="..\Niusys.Extensions\Niusys.Extensions.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Filters\Exceptions\" />
-  </ItemGroup>
-
 </Project>

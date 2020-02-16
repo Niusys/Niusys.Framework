@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Niusys.Extensions.AspNetCore.Sessions;
@@ -58,6 +59,10 @@ namespace Niusys.Extensions.AspNetCore
             get
             {
                 var canonicalUrl = ViewBag.CanonicalUrl?.ToString();
+                if (string.IsNullOrWhiteSpace(canonicalUrl))
+                {
+                    canonicalUrl = this.Context.Request.Path;
+                }
                 return GCU(canonicalUrl);
             }
         }
@@ -67,9 +72,25 @@ namespace Niusys.Extensions.AspNetCore
             return HostEnvironment.IsDevelopment();
         }
 
-        public string GCU(string url = "")
+        /// <summary>
+        /// 在某个页面上Gtag是否被禁止, 不允许ga分析
+        /// </summary>
+        public bool IsGtagDisabled
         {
-            return $"{Host}{url}";
+            get
+            {
+                var strValue = ViewBag.DisableGtag?.ToString();
+                bool.TryParse(strValue ?? false.ToString(), out bool isGtagDisabled);
+                return isGtagDisabled;
+            }
         }
+
+        public string GCU(string url)
+        {
+            var urlHelper = urlHelperFactory.GetUrlHelper(this.ViewContext);
+            return $"{Host}{urlHelper.Content(url)}";
+        }
+
+        public IUrlHelperFactory urlHelperFactory => Context.RequestServices.GetService<IUrlHelperFactory>();
     }
 }

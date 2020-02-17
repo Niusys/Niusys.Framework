@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Polly;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Exceptions;
@@ -17,31 +18,9 @@ namespace Niusys.Extensions.MessageQueue.RabbitMq
     /// </summary>
     public abstract class PublishPool
     {
-        /// <summary>
-        /// ctor
-        /// </summary>
-        /// <param name="clientName"></param>
-        /// <param name="connectionSetting"></param>
-        /// <param name="logger"></param>
-        protected PublishPool(string clientName, ConnectionSetting connectionSetting,
-            ILogger logger,
-            CancellationToken cancellationToken)
-        {
-            ClientName = clientName;
-            PublishPoolSetting = connectionSetting;
-            Logger = logger;
-            CancellationToken = cancellationToken;
-            Task.Factory.StartNew(StartChannelAsync);
-            Task.Factory.StartNew(FlushData);
-            Task.Factory.StartNew(CleanUnsentData);
-            Task.Factory.StartNew(ClearIdleChannel);
-        }
-
         protected string ClientName { get; set; }
-
         protected ConnectionSetting PublishPoolSetting { get; }
         private ILogger Logger { get; set; }
-        protected CancellationToken CancellationToken { get; set; }
         protected IConnection CurrentConnection { get; set; }
 
         private const int _maxChannelQty = 30;
@@ -52,9 +31,43 @@ namespace Niusys.Extensions.MessageQueue.RabbitMq
         #region Write Message
         private readonly Encoding _encoding = Encoding.UTF8;
         private readonly ConcurrentQueue<Tuple<byte[], IBasicProperties, string>> _unsentMessages = new ConcurrentQueue<Tuple<byte[], IBasicProperties, string>>();
+        private readonly IHostApplicationLifetime _hostApplicationLifetime;
+        private CancellationToken ApplicationStopingToken => _hostApplicationLifetime.ApplicationStopping;
+        private readonly CancellationTokenSource _publishPoolCancelTokenSource = new CancellationTokenSource();
+
+        /// <summary>
+        /// ctor
+        /// </summary>
+        /// <param name="clientName"></param>
+        /// <param name="connectionSetting"></param>
+        /// <param name="logger"></param>
+        protected PublishPool(string clientName, ConnectionSetting connectionSetting,
+            ILogger logger,
+            IHostApplicationLifetime hostApplicationLifetime)
+        {
+            ClientName = clientName;
+            PublishPoolSetting = connectionSetting;
+            Logger = logger;
+            _hostApplicationLifetime = hostApplicationLifetime;
+            Task.Factory.StartNew(StartChannelAsync);
+            Task.Factory.StartNew(FlushData);
+            Task.Factory.StartNew(CleanUnsentData);
+            Task.Factory.StartNew(ClearIdleChannel);
+
+            ApplicationStopingToken.Register(() =>
+            {
+                WaitAllMessageSendOutAndCloseChannel();
+                _publishPoolCancelTokenSource.Cancel();
+            });
+        }
 
         public virtual void Write(string messageContent, string customRoutingKey = "", string messageId = "")
         {
+            if (ApplicationStopingToken.IsCancellationRequested)
+            {
+                throw new OperationCanceledException("PublishPool已收到程序停止通知，不允许再将消息写入发送队列", ApplicationStopingToken);
+            }
+
             var basicProperties = GetBasicProperties(messageId);
             var uncompressedMessage = MessageHelper.GetMessage(messageContent, _encoding);
             var message = MessageHelper.CompressMessage(uncompressedMessage, PublishPoolSetting.Compression);
@@ -93,7 +106,7 @@ namespace Niusys.Extensions.MessageQueue.RabbitMq
         {
             while (true)
             {
-                if (CancellationToken.IsCancellationRequested)
+                if (_hostApplicationLifetime.ApplicationStopping.IsCancellationRequested)
                 {
                     break;
                 }
@@ -112,12 +125,7 @@ namespace Niusys.Extensions.MessageQueue.RabbitMq
                             //Channel is open
                             if ((DateTime.Now - channelItem.LastUseTime) > TimeSpan.FromSeconds(15))
                             {
-                                if (channelItem.Channel.IsOpen)
-                                {
-                                    channelItem.Channel.Abort(Constants.NoConsumers, "IdleClear");
-                                    channelItem.Channel.Close(Constants.NoConsumers, "IdleClear");
-                                }
-                                channelItem.Channel.Dispose();
+                                SafeCloseRabbitMqChannel(channelItem, "IdleClear");
                             }
                             else
                             {
@@ -134,6 +142,16 @@ namespace Niusys.Extensions.MessageQueue.RabbitMq
 
                 Thread.Sleep(TimeSpan.FromSeconds(10));
             }
+        }
+
+        private static void SafeCloseRabbitMqChannel(ChannelItem channelItem, string reason)
+        {
+            if (channelItem.Channel.IsOpen)
+            {
+                channelItem.Channel.Abort(Constants.NoConsumers, reason);
+                channelItem.Channel.Close(Constants.NoConsumers, reason);
+            }
+            channelItem.Channel.Dispose();
         }
 
         #endregion
@@ -159,7 +177,7 @@ namespace Niusys.Extensions.MessageQueue.RabbitMq
             await rabbitmqConnectRetryPolicy.ExecuteAsync(async cancellationToke =>
             {
                 Logger.LogWarning("尝试连接RabbitMQ");
-                CurrentConnection = GetConnectionFac().CreateConnection($"{ClientName}_ClientPool-{Environment.MachineName}");
+                CurrentConnection = GetConnectionFac().CreateConnection($"miaoapi-{ClientName}_ClientPool-{Environment.MachineName}");
 
                 CurrentConnection.RecoverySucceeded += (s, e) =>
                 {
@@ -175,7 +193,7 @@ namespace Niusys.Extensions.MessageQueue.RabbitMq
                 };
                 Logger.LogWarning("RabbitMQ连接成功");
                 await Task.CompletedTask.ConfigureAwait(false);
-            }, CancellationToken).ConfigureAwait(false);
+            }, _hostApplicationLifetime.ApplicationStopping).ConfigureAwait(false);
         }
 
         private ConnectionFactory GetConnectionFac()
@@ -224,7 +242,7 @@ namespace Niusys.Extensions.MessageQueue.RabbitMq
                     else
                     {
                         //当unsetMessage为空时,检查是否停止
-                        if (CancellationToken.IsCancellationRequested)
+                        if (_publishPoolCancelTokenSource.Token.IsCancellationRequested)
                         {
                             break;
                         }
@@ -319,12 +337,37 @@ namespace Niusys.Extensions.MessageQueue.RabbitMq
 
         #endregion
 
+        public void WaitAllMessageSendOutAndCloseChannel()
+        {
+            int waitMs = 500;
+            Logger.LogInformation("WaitAllMessageSendOutAndCloseChannel");
+
+            while (true)
+            {
+                if (_unsentMessages.Count > 0)
+                {
+                    Logger.LogInformation($"UnsendMessage队列剩余{_unsentMessages.Count}条消息等待发送, 等待{waitMs}ms之后再检查");
+                    Task.Delay(waitMs);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            Logger.LogInformation("开始关闭Channel");
+            while (_idleChannelQueue.TryDequeue(out var channelItem))
+            {
+                SafeCloseRabbitMqChannel(channelItem, "Application Stoping");
+            }
+        }
+
 
         private void CleanUnsentData()
         {
             while (true)
             {
-                if (CancellationToken.IsCancellationRequested)
+                if (ApplicationStopingToken.IsCancellationRequested)
                 {
                     break;
                 }

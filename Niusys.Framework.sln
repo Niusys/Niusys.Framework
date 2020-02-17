@@ -9,7 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Niusys.Extensions.Storage.M
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Niusys.Extensions", "Niusys.Extensions\Niusys.Extensions.csproj", "{9EA4962F-B1CA-47DE-9309-4AAC1481CD39}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Niusys.Extensions.AspNetCore", "Niusys.Extensions.AspNetCore\Niusys.Extensions.AspNetCore.csproj", "{BB893E6B-87C9-4F3B-8F91-33F08CA3EBC1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Niusys.Extensions.AspNetCore", "Niusys.Extensions.AspNetCore\Niusys.Extensions.AspNetCore.csproj", "{BB893E6B-87C9-4F3B-8F91-33F08CA3EBC1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Niusys.Extensions.Buses", "Niusys.Extensions.Buses\Niusys.Extensions.Buses.csproj", "{E8F5787D-6F79-493F-8124-54F9F05F96FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Niusys.Extensions.Caching.Redis", "Niusys.Extensions.Caching.Redis\Niusys.Extensions.Caching.Redis.csproj", "{6ECAA92D-3AF5-40CE-8FD7-8B56F53940BE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +73,30 @@ Global
 		{BB893E6B-87C9-4F3B-8F91-33F08CA3EBC1}.Release|x64.Build.0 = Release|Any CPU
 		{BB893E6B-87C9-4F3B-8F91-33F08CA3EBC1}.Release|x86.ActiveCfg = Release|Any CPU
 		{BB893E6B-87C9-4F3B-8F91-33F08CA3EBC1}.Release|x86.Build.0 = Release|Any CPU
+		{E8F5787D-6F79-493F-8124-54F9F05F96FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8F5787D-6F79-493F-8124-54F9F05F96FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8F5787D-6F79-493F-8124-54F9F05F96FA}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E8F5787D-6F79-493F-8124-54F9F05F96FA}.Debug|x64.Build.0 = Debug|Any CPU
+		{E8F5787D-6F79-493F-8124-54F9F05F96FA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E8F5787D-6F79-493F-8124-54F9F05F96FA}.Debug|x86.Build.0 = Debug|Any CPU
+		{E8F5787D-6F79-493F-8124-54F9F05F96FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8F5787D-6F79-493F-8124-54F9F05F96FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8F5787D-6F79-493F-8124-54F9F05F96FA}.Release|x64.ActiveCfg = Release|Any CPU
+		{E8F5787D-6F79-493F-8124-54F9F05F96FA}.Release|x64.Build.0 = Release|Any CPU
+		{E8F5787D-6F79-493F-8124-54F9F05F96FA}.Release|x86.ActiveCfg = Release|Any CPU
+		{E8F5787D-6F79-493F-8124-54F9F05F96FA}.Release|x86.Build.0 = Release|Any CPU
+		{6ECAA92D-3AF5-40CE-8FD7-8B56F53940BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6ECAA92D-3AF5-40CE-8FD7-8B56F53940BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6ECAA92D-3AF5-40CE-8FD7-8B56F53940BE}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6ECAA92D-3AF5-40CE-8FD7-8B56F53940BE}.Debug|x64.Build.0 = Debug|Any CPU
+		{6ECAA92D-3AF5-40CE-8FD7-8B56F53940BE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6ECAA92D-3AF5-40CE-8FD7-8B56F53940BE}.Debug|x86.Build.0 = Debug|Any CPU
+		{6ECAA92D-3AF5-40CE-8FD7-8B56F53940BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6ECAA92D-3AF5-40CE-8FD7-8B56F53940BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6ECAA92D-3AF5-40CE-8FD7-8B56F53940BE}.Release|x64.ActiveCfg = Release|Any CPU
+		{6ECAA92D-3AF5-40CE-8FD7-8B56F53940BE}.Release|x64.Build.0 = Release|Any CPU
+		{6ECAA92D-3AF5-40CE-8FD7-8B56F53940BE}.Release|x86.ActiveCfg = Release|Any CPU
+		{6ECAA92D-3AF5-40CE-8FD7-8B56F53940BE}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

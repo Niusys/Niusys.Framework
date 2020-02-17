@@ -58,8 +58,8 @@ namespace Niusys.Extensions.AspNetCore
         {
             get
             {
-                var canonicalUrl = ViewBag.CanonicalUrl?.ToString();
-                if (string.IsNullOrWhiteSpace(canonicalUrl))
+                var canonicalUrl = ViewBag.CanonicalUrl ?? string.Empty;
+                if (string.IsNullOrEmpty(canonicalUrl))
                 {
                     canonicalUrl = this.Context.Request.Path.Value;
                 }

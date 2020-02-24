@@ -22,7 +22,7 @@ namespace Niusys.Extensions.Storage.Mongo
             Collection = mongoDatabase1.GetCollection<TEntity>(collectionName, mongoCollectionSettings);
             _logger = logger;
         }
-        public virtual async Task Add(TEntity entity, CancellationToken cancellationToken = default)
+        public virtual async Task AddAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
             _logger.LogTrace("Begin Add");
             await Collection.InsertOneAsync(entity, cancellationToken: cancellationToken);
@@ -43,7 +43,7 @@ namespace Niusys.Extensions.Storage.Mongo
             _logger.LogTrace("End AddManyAsync");
         }
 
-        public async Task<long> UpdateManyAsync(Expression<Func<TEntity, bool>> expression, UpdateDefinition<TEntity> updateDefinition, CancellationToken cancellationToken = default)
+       public virtual async Task<long> UpdateManyAsync(Expression<Func<TEntity, bool>> expression, UpdateDefinition<TEntity> updateDefinition, CancellationToken cancellationToken = default)
         {
             _logger.LogTrace("Begin UpdateManyAsync");
             var result = await Collection.UpdateManyAsync<TEntity>(expression, updateDefinition, cancellationToken: cancellationToken);
@@ -51,7 +51,7 @@ namespace Niusys.Extensions.Storage.Mongo
             return result.ModifiedCount;
         }
 
-        public async Task<bool> UpdateAsync(FilterDefinition<TEntity> filter, UpdateDefinition<TEntity> updateDefinition, CancellationToken cancellationToken = default)
+       public virtual async Task<bool> UpdateAsync(FilterDefinition<TEntity> filter, UpdateDefinition<TEntity> updateDefinition, CancellationToken cancellationToken = default)
         {
             _logger.LogTrace("Begin UpdateAsync");
             var result = await Collection.UpdateOneAsync(filter, updateDefinition, cancellationToken: cancellationToken);
@@ -59,7 +59,7 @@ namespace Niusys.Extensions.Storage.Mongo
             return result.ModifiedCount == 1;
         }
 
-        public async Task<long> UpdateManyAsync(FilterDefinition<TEntity> filter, UpdateDefinition<TEntity> updateDefinition, CancellationToken cancellationToken = default)
+       public virtual async Task<long> UpdateManyAsync(FilterDefinition<TEntity> filter, UpdateDefinition<TEntity> updateDefinition, CancellationToken cancellationToken = default)
         {
             _logger.LogTrace("Begin UpdateManyAsync");
             var result = await Collection.UpdateManyAsync(filter, updateDefinition, cancellationToken: cancellationToken);
@@ -67,21 +67,21 @@ namespace Niusys.Extensions.Storage.Mongo
             return result.ModifiedCount;
         }
 
-        public async Task DeleteManyAsync(FilterDefinition<TEntity> filter, CancellationToken cancellationToken = default)
+       public virtual async Task DeleteManyAsync(FilterDefinition<TEntity> filter, CancellationToken cancellationToken = default)
         {
             _logger.LogTrace("Begin DeleteManyAsync");
             await Collection.DeleteManyAsync(filter, cancellationToken: cancellationToken);
             _logger.LogTrace("End DeleteManyAsync");
         }
 
-        public async Task DeleteAllAsync(CancellationToken cancellationToken = default)
+       public virtual async Task DeleteAllAsync(CancellationToken cancellationToken = default)
         {
             _logger.LogTrace("Begin DeleteAllAsync");
             await Collection.DeleteManyAsync(Builders<TEntity>.Filter.Empty, cancellationToken: cancellationToken);
             _logger.LogTrace("End DeleteAllAsync");
         }
 
-        public async Task<IList<TEntity>> Search(Expression<Func<TEntity, bool>> predicate, SortDefinition<TEntity> sort, int limit, int skip = 0, CancellationToken cancellationToken = default)
+       public virtual async Task<IList<TEntity>> SearchAsync(Expression<Func<TEntity, bool>> predicate, SortDefinition<TEntity> sort, int limit, int skip = 0, CancellationToken cancellationToken = default)
         {
             _logger.LogTrace("Begin Search");
             var records = await Collection.Find(predicate).Sort(sort).Limit(limit).Skip(skip).ToListAsync(cancellationToken: cancellationToken);
@@ -89,7 +89,7 @@ namespace Niusys.Extensions.Storage.Mongo
             return records;
         }
 
-        public async Task<IList<TEntity>> Search(FilterDefinition<TEntity> filter, SortDefinition<TEntity> sort, int limit, int skip = 0, CancellationToken cancellationToken = default)
+       public virtual async Task<IList<TEntity>> SearchAsync(FilterDefinition<TEntity> filter, SortDefinition<TEntity> sort, int limit, int skip = 0, CancellationToken cancellationToken = default)
         {
             _logger.LogTrace("Begin Search");
             var records = await Collection.Find(filter).Sort(sort).Limit(limit).Skip(skip).ToListAsync(cancellationToken: cancellationToken);
@@ -97,7 +97,7 @@ namespace Niusys.Extensions.Storage.Mongo
             return records;
         }
 
-        public async Task<IList<TEntity>> SearchAsync(FilterDefinition<TEntity> filter, CancellationToken cancellationToken = default)
+       public virtual async Task<IList<TEntity>> SearchAsync(FilterDefinition<TEntity> filter, CancellationToken cancellationToken = default)
         {
             _logger.LogTrace("Begin SearchAsync");
             var result = await Collection.Find(filter).ToListAsync(cancellationToken: cancellationToken);
@@ -105,7 +105,7 @@ namespace Niusys.Extensions.Storage.Mongo
             return result;
         }
 
-        public async Task<long> CountAsync(FilterDefinition<TEntity> filter, CancellationToken cancellationToken = default)
+       public virtual async Task<long> CountAsync(FilterDefinition<TEntity> filter, CancellationToken cancellationToken = default)
         {
             _logger.LogTrace("Begin CountAsync");
             var result = await Collection.CountDocumentsAsync(filter, cancellationToken: cancellationToken);
@@ -113,7 +113,7 @@ namespace Niusys.Extensions.Storage.Mongo
             return result;
         }
 
-        public async Task<IList<TEntity>> SearchAsync(FilterDefinition<TEntity> filter, SortDefinition<TEntity> sort, CancellationToken cancellationToken = default)
+       public virtual async Task<IList<TEntity>> SearchAsync(FilterDefinition<TEntity> filter, SortDefinition<TEntity> sort, CancellationToken cancellationToken = default)
         {
             _logger.LogTrace("Begin SearchAsync");
             var result = await Collection.Find(filter).Sort(sort).ToListAsync(cancellationToken: cancellationToken);
@@ -121,23 +121,23 @@ namespace Niusys.Extensions.Storage.Mongo
             return result;
         }
 
-        public async Task<IList<TEntity>> SearchAsync(FilterDefinition<TEntity> filter, SortDefinition<TEntity> sort, int pageCount, CancellationToken cancellationToken = default)
+       public virtual async Task<IList<TEntity>> SearchAsync(FilterDefinition<TEntity> filter, SortDefinition<TEntity> sort, int limit, CancellationToken cancellationToken = default)
         {
             _logger.LogTrace("Begin SearchAsync");
-            var result = await Collection.Find(filter).Sort(sort).Limit(pageCount).ToListAsync(cancellationToken: cancellationToken);
+            var result = await Collection.Find(filter).Sort(sort).Limit(limit).ToListAsync(cancellationToken: cancellationToken);
             _logger.LogTrace("End SearchAsync");
             return result;
         }
 
-        public async Task<IList<TEntity>> SearchAsync(FilterDefinition<TEntity> filter, int pageCount, CancellationToken cancellationToken = default)
+       public virtual async Task<IList<TEntity>> SearchAsync(FilterDefinition<TEntity> filter, int limit, CancellationToken cancellationToken = default)
         {
             _logger.LogTrace("Begin SearchAsync");
-            var result = await Collection.Find(filter).Limit(pageCount).ToListAsync(cancellationToken: cancellationToken);
+            var result = await Collection.Find(filter).Limit(limit).ToListAsync(cancellationToken: cancellationToken);
             _logger.LogTrace("End SearchAsync");
             return result;
         }
 
-        public async Task<TEntity> SearchOneAsync(FilterDefinition<TEntity> filter, CancellationToken cancellationToken = default)
+       public virtual async Task<TEntity> SearchOneAsync(FilterDefinition<TEntity> filter, CancellationToken cancellationToken = default)
         {
             _logger.LogTrace("Begin SearchOneAsync");
             var result = await Collection.Find(filter).SingleOrDefaultAsync(cancellationToken);
@@ -145,15 +145,15 @@ namespace Niusys.Extensions.Storage.Mongo
             return result;
         }
 
-        public async Task<bool> ExistsAsync(FilterDefinition<TEntity> filter, CancellationToken cancellationToken = default)
+       public virtual async Task<bool> ExistsAsync(FilterDefinition<TEntity> filter, CancellationToken cancellationToken = default)
         {
             _logger.LogTrace("Begin ExistsAsync");
-            var result = await Collection.CountDocumentsAsync(filter);
+            var result = await Collection.CountDocumentsAsync(filter, cancellationToken: cancellationToken);
             _logger.LogTrace("End ExistsAsync");
             return result > 0;
         }
-
-        public async Task<Page<TEntity>> PaginationSearchAsync(FilterDefinition<TEntity> filter, SortDefinition<TEntity> sort, int pageIndex = 1, int pageSize = 20, bool ignoreCount = true, long defaultCountNumber = 10000, CancellationToken cancellationToken = default)
+       //public virtual async Task<Page<TEntity>> PaginationSearchAsync(FilterDefinition<TEntity> filter, SortDefinition<TEntity> sort, int pageIndex = 1, int pageSize = 20, bool ignoreCount = false, int defaultCountNumber = 10000, CancellationToken cancellationToken = default)
+       public virtual async Task<Page<TEntity>> PaginationSearchAsync(FilterDefinition<TEntity> filter, SortDefinition<TEntity> sort, int pageIndex = 1, int pageSize = 20, bool ignoreCount = true, long defaultCountNumber = 10000, CancellationToken cancellationToken = default)
         {
             _logger.LogTrace("Begin PaginationSearchAsync");
 
@@ -181,7 +181,7 @@ namespace Niusys.Extensions.Storage.Mongo
             return result;
         }
 
-        public async Task<IList<TEntity>> GetAll(CancellationToken cancellationToken = default)
+       public virtual async Task<IList<TEntity>> GetAllAsync(CancellationToken cancellationToken = default)
         {
             _logger.LogTrace("Begin GetAll");
             var filter = Builders<TEntity>.Filter.Empty;
@@ -190,7 +190,7 @@ namespace Niusys.Extensions.Storage.Mongo
             return result;
         }
 
-        public async Task<bool> Delete(TEntity entity, FilterDefinition<TEntity> filter, CancellationToken cancellationToken = default)
+       public virtual async Task<bool> Delete(TEntity entity, FilterDefinition<TEntity> filter, CancellationToken cancellationToken = default)
         {
             _logger.LogTrace("Begin Delete");
             var result = (await Collection.DeleteOneAsync(filter, cancellationToken: cancellationToken)).DeletedCount > 0;

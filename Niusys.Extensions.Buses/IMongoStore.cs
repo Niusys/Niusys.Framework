@@ -14,7 +14,7 @@ namespace Niusys.Extensions.Buses
         Task<IList<TCollection>> SearchAsync(FilterDefinition<TCollection> lockedFilter, SortDefinition<TCollection> sort, int pageCount, CancellationToken cancellationToken = default);
         Task<TCollection> SearchOneAsync(FilterDefinition<TCollection> filterDefinition, CancellationToken cancellationToken = default);
         Task<long> UpdateManyAsync(FilterDefinition<TCollection> filter, UpdateDefinition<TCollection> updateDefinition, CancellationToken cancellationToken = default);
-        Task<bool> Delete(string messageId, CancellationToken cancellationToken = default);
+        Task<bool> DeleteAsync(string messageId, CancellationToken cancellationToken = default);
         Task<TCollection> GetByIdAsync(string messageId, CancellationToken cancellationToken = default);
     }
 }

@@ -13,6 +13,7 @@ namespace Niusys.Extensions.Storage.Mongo
 
         [BsonId]
         [BsonIgnoreIfDefault]
+        [BsonIgnoreIfNull]
         public ObjectId Sysid { get; set; }
     }
 }

@@ -259,7 +259,7 @@ namespace Niusys.Extensions.Buses
                         {
                             var messageId = ea.BasicProperties.MessageId;
                             var consumerErrorMessageRepository = ServiceProvider.GetService<IConsumerErrorMessageStore>();
-                            consumerErrorMessageRepository.Delete(messageId).Wait();
+                            consumerErrorMessageRepository.DeleteAsync(messageId).Wait();
                         }
                         break;
                     case ConsumeHandleResult.ActAndMoveToErrorQueue:

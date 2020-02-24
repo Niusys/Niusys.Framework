@@ -1,13 +1,15 @@
 ﻿using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using System;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Niusys.Extensions.Storage.Mongo
 {
-    public abstract class NoSqlBaseRepository<TEntity, TMongoSetting> : MongoKeylessBaseRepository<TEntity, TMongoSetting>
-        where TEntity : IMongoEntity<ObjectId>
+    public abstract class NoSqlBaseRepository<TEntity, TMongoSetting> : MongoKeylessBaseRepository<TEntity, TMongoSetting>, INoSqlBaseRepository<TEntity>
+        where TEntity : MongoEntity, IMongoEntity<ObjectId>
         where TMongoSetting : MongodbOptions, new()
     {
         private readonly ILogger _logger;
@@ -18,7 +20,13 @@ namespace Niusys.Extensions.Storage.Mongo
             this._logger = logger;
         }
 
-        public async Task<bool> Update(TEntity entity, CancellationToken cancellationToken = default)
+        public virtual async Task<TEntity> GetByPropertyAsync<TField>(Expression<Func<TEntity, TField>> expression, TField value, CancellationToken cancellationToken = default)
+        {
+            var filter = Builders<TEntity>.Filter.Eq(expression, value);
+            return await Collection.Find(filter).FirstOrDefaultAsync(cancellationToken);
+        }
+
+        public virtual async Task<bool> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
             _logger.LogTrace("Begin Update");
             var filter = Builders<TEntity>.Filter.Eq(x => x.Sysid, entity.Sysid);
@@ -27,7 +35,7 @@ namespace Niusys.Extensions.Storage.Mongo
             return result.ModifiedCount == 1;
         }
 
-        public async Task<bool> ReplaceOneAsync(TEntity entity, CancellationToken cancellationToken = default)
+        public virtual async Task<bool> ReplaceOneAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
             _logger.LogTrace("Begin ReplaceOneAsync");
             var filter = Builders<TEntity>.Filter.Eq(x => x.Sysid, entity.Sysid);
@@ -36,15 +44,15 @@ namespace Niusys.Extensions.Storage.Mongo
             return result;
         }
 
-        public async Task<TEntity> GetByIdAsync(string id, CancellationToken cancellationToken = default)
+        public virtual async Task<TEntity> GetByIdAsync(ObjectId sysId, CancellationToken cancellationToken = default)
         {
             _logger.LogTrace("Begin GetByIdAsync");
-            var result = await Collection.Find(Builders<TEntity>.Filter.Eq(x => x.Sysid, id.SafeToObjectId())).FirstOrDefaultAsync(cancellationToken);
+            var result = await Collection.Find(Builders<TEntity>.Filter.Eq(x => x.Sysid, sysId)).FirstOrDefaultAsync(cancellationToken);
             _logger.LogTrace("End GetByIdAsync");
             return result;
         }
 
-        public async Task<bool> Delete(TEntity entity, CancellationToken cancellationToken = default)
+        public virtual async Task<bool> DeleteAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
             _logger.LogTrace("Begin Delete");
             var filter = Builders<TEntity>.Filter.Eq(x => x.Sysid, entity.Sysid);
@@ -53,10 +61,10 @@ namespace Niusys.Extensions.Storage.Mongo
             return result;
         }
 
-        public async Task<bool> Delete(string sysid, CancellationToken cancellationToken = default)
+        public virtual async Task<bool> DeleteAsync(ObjectId sysid, CancellationToken cancellationToken = default)
         {
             _logger.LogTrace("Begin Delete");
-            var filter = Builders<TEntity>.Filter.Eq(x => x.Sysid, sysid.SafeToObjectId());
+            var filter = Builders<TEntity>.Filter.Eq(x => x.Sysid, sysid);
             var result = (await Collection.DeleteOneAsync(filter, cancellationToken: cancellationToken)).DeletedCount > 0;
             _logger.LogTrace("End Delete");
             return result;

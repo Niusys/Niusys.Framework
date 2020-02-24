@@ -13,7 +13,7 @@ namespace Niusys.Extensions.Buses
             throw new System.NotImplementedException();
         }
 
-        public Task<bool> Delete(string messageId, CancellationToken cancellationToken = default)
+        public Task<bool> DeleteAsync(string messageId, CancellationToken cancellationToken = default)
         {
             throw new System.NotImplementedException();
         }

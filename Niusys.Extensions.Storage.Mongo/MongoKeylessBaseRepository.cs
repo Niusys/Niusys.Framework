@@ -163,6 +163,10 @@ namespace Niusys.Extensions.Storage.Mongo
             {
                 pageIndex = 1;
             }
+            if (pageSize < 1)
+            {
+                pageSize = 20;
+            }
 
             var searchTask = Collection.Find(filter).Sort(sort).Limit(pageSize).Skip((pageIndex - 1) * pageSize).ToListAsync(cancellationToken: cancellationToken);
             var totalTask = ignoreCount ? Task.FromResult(defaultCountNumber) : Collection.CountDocumentsAsync(filter, new CountOptions { Limit = defaultCountNumber }, cancellationToken: cancellationToken);

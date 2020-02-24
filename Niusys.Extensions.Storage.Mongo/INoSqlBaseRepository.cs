@@ -25,7 +25,7 @@ namespace Niusys.Extensions.Storage.Mongo
         Task<IList<TEntity>> SearchAsync(FilterDefinition<TEntity> filter, CancellationToken cancellationToken = default);
         Task<IList<TEntity>> SearchAsync(FilterDefinition<TEntity> filter, int limit, CancellationToken cancellationToken = default);
         Task<IList<TEntity>> SearchAsync(FilterDefinition<TEntity> filter, SortDefinition<TEntity> sort, CancellationToken cancellationToken = default);
-        Task<IList<TEntity>> SearchAsync(FilterDefinition<TEntity> filter, SortDefinition<TEntity> sort, int limit, CancellationToken cancellationToken = default);
+        Task<IList<TEntity>> SearchAsync(FilterDefinition<TEntity> filter, SortDefinition<TEntity> sort, int limit, int skip = 0, CancellationToken cancellationToken = default);
         Task<TEntity> SearchOneAsync(FilterDefinition<TEntity> filter, CancellationToken cancellationToken = default);
         Task<bool> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default);
         Task<long> UpdateManyAsync(Expression<Func<TEntity, bool>> expression, UpdateDefinition<TEntity> updateDefinition, CancellationToken cancellationToken = default);

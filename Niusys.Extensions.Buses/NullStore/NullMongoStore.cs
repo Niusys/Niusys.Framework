@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
 using Niusys.Extensions.ComponentModels;
 using System.Collections.Generic;
 using System.Threading;
@@ -13,12 +14,12 @@ namespace Niusys.Extensions.Buses
             throw new System.NotImplementedException();
         }
 
-        public Task<bool> DeleteAsync(string messageId, CancellationToken cancellationToken = default)
+        public Task<bool> DeleteAsync(ObjectId messageId, CancellationToken cancellationToken = default)
         {
             throw new System.NotImplementedException();
         }
 
-        public Task<TCollection> GetByIdAsync(string messageId, CancellationToken cancellationToken = default)
+        public Task<TCollection> GetByIdAsync(ObjectId messageId, CancellationToken cancellationToken = default)
         {
             throw new System.NotImplementedException();
         }
@@ -28,7 +29,7 @@ namespace Niusys.Extensions.Buses
             throw new System.NotImplementedException();
         }
 
-        public Task<IList<TCollection>> SearchAsync(FilterDefinition<TCollection> lockedFilter, SortDefinition<TCollection> sort, int pageCount, CancellationToken cancellationToken = default)
+        public Task<IList<TCollection>> SearchAsync(FilterDefinition<TCollection> lockedFilter, SortDefinition<TCollection> sort, int limit, int skip = 0, CancellationToken cancellationToken = default)
         {
             throw new System.NotImplementedException();
         }

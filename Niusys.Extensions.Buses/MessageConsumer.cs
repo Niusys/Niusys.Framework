@@ -259,7 +259,7 @@ namespace Niusys.Extensions.Buses
                         {
                             var messageId = ea.BasicProperties.MessageId;
                             var consumerErrorMessageRepository = ServiceProvider.GetService<IConsumerErrorMessageStore>();
-                            consumerErrorMessageRepository.DeleteAsync(messageId).Wait();
+                            consumerErrorMessageRepository.DeleteAsync(messageId.SafeToObjectId()).Wait();
                         }
                         break;
                     case ConsumeHandleResult.ActAndMoveToErrorQueue:
@@ -269,7 +269,7 @@ namespace Niusys.Extensions.Buses
                         {
                             var messageId = ea.BasicProperties.MessageId;
                             var consumerErrorMessageRepository = ServiceProvider.GetService<IConsumerErrorMessageStore>();
-                            var message = consumerErrorMessageRepository.GetByIdAsync(messageId).Result;
+                            var message = consumerErrorMessageRepository.GetByIdAsync(messageId.SafeToObjectId()).Result;
                             message.ProcessTimes += 1;//已重试次数+1
 
                             var originalBodyMessage = Encoding.UTF8.GetString(ea.Body);

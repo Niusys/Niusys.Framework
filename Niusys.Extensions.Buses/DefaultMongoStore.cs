@@ -5,7 +5,7 @@ using Niusys.Extensions.Storage.Mongo;
 namespace Niusys.Extensions.Buses
 {
     public class DefaultMongoStore<TCollection> : NoSqlBaseRepository<TCollection, LogMongoSettings>, IMongoStore<TCollection>
-        where TCollection : IMongoEntity<ObjectId>
+        where TCollection : MongoEntity, IMongoEntity<ObjectId>
     {
         public DefaultMongoStore(MongodbContext<LogMongoSettings> mongoDatabase,
             ILogger<NoSqlBaseRepository<TCollection, LogMongoSettings>> logger) : base(mongoDatabase, logger)

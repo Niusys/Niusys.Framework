@@ -20,7 +20,7 @@ namespace Niusys.Extensions.Storage.Mongo
         Task DeleteManyAsync(FilterDefinition<TEntity> filter, CancellationToken cancellationToken = default);
         Task<IList<TEntity>> GetAllAsync(CancellationToken cancellationToken = default);
         Task<TEntity> GetByPropertyAsync<TField>(Expression<Func<TEntity, TField>> expression, TField value, CancellationToken cancellationToken = default);
-        Task<Page<TEntity>> PaginationSearchAsync(FilterDefinition<TEntity> filter, SortDefinition<TEntity> sort, int pageIndex = 1, int pageSize = 20, bool ignoreCount = true, long defaultCountNumber = 10000, CancellationToken cancellationToken = default);
+        Task<Page<TEntity>> PaginationSearchAsync(FilterDefinition<TEntity> filter, SortDefinition<TEntity> sort, int pageIndex = 1, int pageSize = 20, bool ignoreCount = false, long defaultCountNumber = 10000, CancellationToken cancellationToken = default);
         Task<bool> ReplaceOneAsync(TEntity entity, CancellationToken cancellationToken = default);
         Task<IList<TEntity>> SearchAsync(FilterDefinition<TEntity> filter, CancellationToken cancellationToken = default);
         Task<IList<TEntity>> SearchAsync(FilterDefinition<TEntity> filter, int limit, CancellationToken cancellationToken = default);

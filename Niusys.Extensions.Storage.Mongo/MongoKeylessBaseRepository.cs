@@ -142,8 +142,8 @@ namespace Niusys.Extensions.Storage.Mongo
             _logger.LogTrace("End ExistsAsync");
             return result > 0;
         }
-        //public virtual async Task<Page<TEntity>> PaginationSearchAsync(FilterDefinition<TEntity> filter, SortDefinition<TEntity> sort, int pageIndex = 1, int pageSize = 20, bool ignoreCount = false, int defaultCountNumber = 10000, CancellationToken cancellationToken = default)
-        public virtual async Task<Page<TEntity>> PaginationSearchAsync(FilterDefinition<TEntity> filter, SortDefinition<TEntity> sort, int pageIndex = 1, int pageSize = 20, bool ignoreCount = true, long defaultCountNumber = 10000, CancellationToken cancellationToken = default)
+        
+        public virtual async Task<Page<TEntity>> PaginationSearchAsync(FilterDefinition<TEntity> filter, SortDefinition<TEntity> sort, int pageIndex = 1, int pageSize = 20, bool ignoreCount = false, long defaultCountNumber = 10000, CancellationToken cancellationToken = default)
         {
             _logger.LogTrace("Begin PaginationSearchAsync");
 

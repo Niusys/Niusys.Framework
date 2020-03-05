@@ -22,7 +22,7 @@ namespace Niusys.Extensions.AspNetCore.Filters
         public override void OnException(ExceptionContext context)
         {
             var logger = context.HttpContext.RequestServices.GetService<ILogger<ExceptionHandlerFilter>>();
-            var requestSession = context.HttpContext.RequestServices.GetService<IRequestSession>();
+            var requestSession = context.HttpContext.RequestServices.GetRequiredService<IRequestSession>();
             if (!requestSession.IsApiRequest)
                 return;
 

@@ -7,7 +7,7 @@ using Niusys.Extensions.AspNetCore.Sessions;
 
 namespace Niusys.Extensions.AspNetCore
 {
-    public abstract class BaseRazorPage<T> : RazorPage<T>
+    public abstract class SeoRazorPage<T> : RazorPage<T>
     {
         public string Host => RequestSession.Host;
 
@@ -63,7 +63,7 @@ namespace Niusys.Extensions.AspNetCore
                 {
                     canonicalUrl = this.Context.Request.Path.Value;
                 }
-                return GCU(canonicalUrl);
+                return GCU(canonicalUrl).TrimEnd('/');
             }
         }
 

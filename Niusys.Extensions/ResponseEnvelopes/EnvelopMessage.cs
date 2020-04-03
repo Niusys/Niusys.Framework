@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Niusys.Extensions.ResponseEnvelopes
+namespace Niusys
 {
     public class EnvelopMessage : EnvelopMessageAbstract
     {

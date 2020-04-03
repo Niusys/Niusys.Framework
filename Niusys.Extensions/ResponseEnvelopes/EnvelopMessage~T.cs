@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Niusys.Extensions.ResponseEnvelopes
+namespace Niusys
 {
     public class EnvelopMessage<T> : EnvelopMessageAbstract
     {
@@ -9,8 +9,8 @@ namespace Niusys.Extensions.ResponseEnvelopes
 
         }
 
-        public EnvelopMessage(int code, string msg, string errMsg, T data)
-            : base(code, msg, errMsg)
+        public EnvelopMessage(int code, string hintMessage, string debugMessage, T data)
+            : base(code, hintMessage, debugMessage)
         {
             Data = data;
         }

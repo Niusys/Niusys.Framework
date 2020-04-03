@@ -1,4 +1,4 @@
-﻿namespace Niusys.Extensions.ResponseEnvelopes
+﻿namespace Niusys
 {
     public abstract class EnvelopMessageAbstract
     {
@@ -6,11 +6,11 @@
         {
         }
 
-        public EnvelopMessageAbstract(int code, string msg = null, string errMsg = null)
+        public EnvelopMessageAbstract(int code, string hintMessage = null, string debugMessage = null)
         {
             Code = code;
-            Msg = msg;
-            ErrMsg = errMsg;
+            Msg = hintMessage;
+            ErrMsg = debugMessage;
         }
 
         /// <summary>
